@@ -1,0 +1,84 @@
+# This is a basic workflow to help you get started with Actions
+name: Build sketch BLE_Pastable1.1
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+    paths:
+      - 'BLE_Pastable1.1/*.*'
+      - '.github/workflows/BLE_Pastable1.1.yml'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This defines a job for checking the Arduino library format specifications
+  # see <https://github.com/marketplace/actions/arduino-arduino-lint-action>
+  lint:
+    name: check library
+    runs-on: ubuntu-latest
+    #continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Arduino - lint
+      - name: Arduino-lint
+        uses: arduino/arduino-lint-action@v1
+        with:
+          library-manager: update
+          verbose: false
+          path: ./BLE_Pastable1.1
+
+  build:
+    name: build BLE_Pastable1.1
+    runs-on: ubuntu-latest
+    #continue-on-error: true
+
+    steps:
+    - uses: actions/checkout@v1
+
+    # -----------------------
+    - name: Compile BLE_Pastable1.1
+      uses: ArminJo/arduino-test-compile@master
+      with:
+        arduino-board-fqbn: arduino:mbed:nano33ble
+        sketch-names: "BLE_Pastable1.1.ino"
+        extra-arduino-cli-args: "--libraries libraries"
+        set-build-path: true
+
+    - name: Create artifact
+      run: |
+          mkdir release
+          cp BLE_Pastable1.1/build/arduino.mbed.nano33ble/BLE_Pastable1.1* release
+          cd                                                                  release
+          zip -m ${{ github.ref_name }}-release.zip *.*
+          cp ${{ github.ref_name }}-release.zip ..
+    # -----------------------
+
+    - name: Create release date
+      id: read_release_win
+      shell: bash
+      run: |
+        r=$(date "+%Y%m%d-%H%M%S")
+        echo "::set-output name=RELEASE_BODY::$r"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: build-${{ steps.read_release_win.outputs.RELEASE_BODY }}
+        release_name: ${{ github.ref_name }} - Release 1.1 ${{ steps.read_release_win.outputs.RELEASE_BODY }}
+
+    - name: Upload Release Arduino
+      id: upload_release_asset
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: build-${{ steps.read_release_win.outputs.RELEASE_BODY }}
+        files: |
+          ${{ github.ref_name }}-release.zip
