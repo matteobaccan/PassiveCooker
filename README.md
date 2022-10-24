@@ -21,3 +21,8 @@ https://github.com/rlogiacco/CircularBuffer/issues/28#issuecomment-1000541544
 
 Questa modifica ha prodotto una distribuzione leggermente diversa che ho messo nella cartella libraries
 
+# Progetto
+
+Il progetto originale può essere visto qui
+
+https://www.barilla.com/it-it/cottura-passiva
