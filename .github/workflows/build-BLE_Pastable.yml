@@ -77,7 +77,7 @@ jobs:
 
     - name: Upload Release Arduino
       id: upload_release_asset
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: build-${{ steps.read_release_win.outputs.RELEASE_BODY }}
         files: |
