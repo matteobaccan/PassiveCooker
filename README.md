@@ -33,7 +33,7 @@ L'APP da utilizzare col devide non è stata invece rilasciata in sorgente ed è 
 
 ## Technique
 
-Di seguito l'elenco dei tempi di cottura per la posta Barilla
+Di seguito l'elenco dei tempi di cottura per la pasta Barilla
 
 ![Tempi di cottura](./asset/pasta1.png)
 ![Tempi di cottura](./asset/pasta2.png)
