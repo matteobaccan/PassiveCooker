@@ -23,7 +23,7 @@ jobs:
     #continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       # Arduino - lint
       - name: Arduino-lint
@@ -39,7 +39,7 @@ jobs:
     #continue-on-error: true
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     # -----------------------
     - name: Compile BLE_Pastable1.1
